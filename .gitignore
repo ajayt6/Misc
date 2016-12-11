@@ -8,3 +8,8 @@ cs707Parser/.idea/workspace.xml
 cs707Parser/ByPortJSON2.json
 cs707Parser/ByPortJSON3.json
 cs707Parser/T1_OT2CSV_nov15.csv
+mail/HR_list_test.txt
+mail/helper.py
+mail/sendHRMail.py
+mail/sentList.txt
+mail/unsentList.txt
