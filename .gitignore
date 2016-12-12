@@ -14,3 +14,4 @@ mail/sendHRMail.py
 mail/sentList.txt
 mail/unsentList.txt
 mail/*
+cs707_qos/.idea/*
