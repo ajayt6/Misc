@@ -13,3 +13,4 @@ mail/helper.py
 mail/sendHRMail.py
 mail/sentList.txt
 mail/unsentList.txt
+mail/*
