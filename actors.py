@@ -4,9 +4,9 @@ import pickle
 import operator
 import re
 import os
-from google_results import google_search_scrape #this line works even though it shows up as an error
+from google_results import google_search_scrape #this suresh gopiline works even though it shows up as an error
 
-
+data_folder = 'data/'
 hindu_c = ['Nair','Menon','Iyer','Bhaskaran','Kurup','Murugan','Raghavan','Ramu','Sivan','Mahadev','Shivan','Varma','Verma','Pillai','Pilla','Parameswaran','Jagannathan','Balakrishnan','Balachandran','Shivaprasad']
 christian_c = ['Alex','Zachariah','Sunny','John','Peter','George','Michael','James','Mathews','Mathew','Varghese','Albert','Charlie','Jimmy','Jacob','Thoma','Samuel','Freddy','Jacky','Cheriyan','Cherian','Richard']
 muslim_c = ['Abdullah', 'Abdulla','Omar','Ahmed','Abdul','Ali','Rashid','Nazir','Ibrahim']
@@ -29,17 +29,20 @@ def main():
     global christian_c
     global muslim_c
 
-    file = namestr(hindu_c,globals() ) + '.p'
+    global data_folder
+
+
+    file = data_folder + namestr(hindu_c,globals() ) + '.p'
     if os.path.exists(file):
         with open(file,'rb') as pfile:
             hindu_c = pickle.load(pfile)
 
-    file = namestr(christian_c, globals()) + '.p'
+    file = data_folder + namestr(christian_c, globals()) + '.p'
     if os.path.exists(file):
         with open(file,'rb') as pfile:
             christian_c = pickle.load(pfile)
 
-    file = namestr(muslim_c, globals()) + '.p'
+    file = data_folder + namestr(muslim_c, globals()) + '.p'
     if os.path.exists(file):
         with open(file,'rb') as pfile:
             muslim_c = pickle.load(pfile)
@@ -57,33 +60,13 @@ def main():
                      'Inspector' : 'Police officer',
                      'Dysp' : 'Police officer' ,
                      'C.I.D.': 'Police officer',
-                     'Police' : 'Police officer'
+                     'Police' : 'Police officer',
+                     'IPS' : 'Police officer',
+                     'I.P.S.' : 'Police officer'
                      }
 
 
-    actor_d = { 'Prem Nazir' : 'https://www.imdb.com/name/nm0623427/', #0
-                'Mohanlal' :  'http://www.imdb.com/name/nm0482320/?ref_=fn_al_nm_1' , #1
-                'Mammootty' : 'http://www.imdb.com/name/nm0007123/?ref_=nv_sr_1' , #2
-                'Kamal Haasan' : 'http://www.imdb.com/name/nm0352032/' , #3
-                'Rajinikanth' : 'http://www.imdb.com/name/nm0707425/' , #4
-                'Shah Rukh Khan' : 'http://www.imdb.com/name/nm0451321/' , #5
-                'Tom Cruise' : 'http://www.imdb.com/name/nm0000129/' , #6
-                'Shobana' : 'http://www.imdb.com/name/nm0811794/', #7
-                'Jyothika' : 'http://www.imdb.com/name/nm0433392/' , #8
-                'Simran' : 'http://www.imdb.com/name/nm0801264/' ,#9
-                'Manju Warrier' : 'http://www.imdb.com/name/nm0913097/' , #10
-                'Jayalalitha' : 'http://www.imdb.com/name/nm0412883/' , #11
-                }
 
-    actor_l = []
-
-    for actor in actor_d:
-        actor_l.append(actor)
-
-
-    actor = actor_l[2]
-
-    #print("Actor name is: " + actor)
 
     actor = input("Enter actor name: ")
     url = gss.get_first_result_url(actor + ' imdb')
@@ -133,10 +116,12 @@ def main():
 
         name = re.sub("[\(\[].*?[\)\]]", "", name)
 
+        name_l = name.split()
+
         f=0
         for pair in religion_ds:
-            for word in pair[0]:
-                if word.lower() in name.lower():
+            for part in name_l:
+                if part.lower() in pair[0]:
                     pair[1].append(name)
                     f=1
                     break
@@ -145,8 +130,6 @@ def main():
 
         if f==0:
             uncategorized_religion.append(name)
-
-        name_l = name.split()
 
         for part in name_l:
 
@@ -164,20 +147,20 @@ def main():
                     if len(r) == 0:
                         pass
                     elif r == 'h':
-                        hindu_c.add(part)
+                        hindu_c.add(part.lower())
                     elif r == 'c':
-                        christian_c.add(part)
+                        christian_c.add(part.lower())
                     elif r == 'm':
-                        muslim_c.add(part)
+                        muslim_c.add(part.lower())
 
     #save modified religion sets
-    with open(namestr(hindu_c, globals()) + '.p','wb') as file:
+    with open(data_folder + namestr(hindu_c, globals()) + '.p','wb') as file:
         pickle.dump(hindu_c,file)
 
-    with open(namestr(christian_c, globals()) + '.p','wb') as file:
+    with open(data_folder + namestr(christian_c, globals()) + '.p','wb') as file:
         pickle.dump(christian_c,file)
 
-    with open(namestr(muslim_c, globals()) + '.p','wb') as file:
+    with open(data_folder + namestr(muslim_c, globals()) + '.p','wb') as file:
         pickle.dump(muslim_c,file)
 
 
