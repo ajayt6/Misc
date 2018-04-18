@@ -4,7 +4,7 @@ import pickle
 import operator
 import re
 import os
-
+from google_results import google_search_scrape #this line works even though it shows up as an error
 
 
 hindu_c = ['Nair','Menon','Iyer','Bhaskaran','Kurup','Murugan','Raghavan','Ramu','Sivan','Mahadev','Shivan','Varma','Verma','Pillai','Pilla','Parameswaran','Jagannathan','Balakrishnan','Balachandran','Shivaprasad']
@@ -22,6 +22,8 @@ def namestr(obj, namespace):
 
 
 def main():
+
+    gss = google_search_scrape()
 
     global hindu_c
     global christian_c
@@ -81,9 +83,12 @@ def main():
 
     actor = actor_l[2]
 
-    print("Actor name is: " + actor)
+    #print("Actor name is: " + actor)
 
-    url = actor_d[actor]
+    actor = input("Enter actor name: ")
+    url = gss.get_first_result_url(actor + ' imdb')
+
+    #url = actor_d[actor]
     response = requests.get(url)
     html_string = response.text  # Access the HTML with the text property
 
