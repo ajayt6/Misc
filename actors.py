@@ -66,14 +66,36 @@ def main():
                      }
 
 
-
+    actor_data_d = {}
+    actor_data_file = data_folder + 'actor_data.p'
+    if os.path.exists(actor_data_file):
+        with open(actor_data_file,'rb') as pfile:
+            actor_data_d = pickle.load(pfile)
 
     actor = input("Enter actor name: ")
-    url = gss.get_first_result_url(actor + ' imdb')
+    pflag = False
 
-    #url = actor_d[actor]
-    response = requests.get(url)
-    html_string = response.text  # Access the HTML with the text property
+    if actor.lower() in actor_data_d:
+        url = actor_data_d[actor.lower()]
+    else:
+        url = gss.get_first_result_url(actor + ' imdb')
+        actor_data_d[actor.lower()] = url
+        pflag = True
+
+    if url in actor_data_d:
+        html_string = actor_data_d[url]
+    else:
+        response = requests.get(url)
+        html_string = response.text  # Access the HTML with the text property
+        actor_data_d[url] = html_string
+        pflag = True
+
+    if pflag:
+        #pickle the data structure
+        with open(actor_data_file,'wb') as pfile:
+            pickle.dump(actor_data_d,pfile)
+
+
 
 
     soup = BeautifulSoup(html_string, 'lxml')  # Parse the HTML as a string
